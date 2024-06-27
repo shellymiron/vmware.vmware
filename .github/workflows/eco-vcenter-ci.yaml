@@ -24,10 +24,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          path: ansible_collections/cloud/vmware_ops
+          path: ansible_collections/vmware/vmware
 
       - name: Generate integration config
-        working-directory: ansible_collections/cloud/vmware_ops/tests/integration
+        working-directory: ansible_collections/vmware/vmware/tests/integration
         run: |
           chmod +x generate_integration_config.sh
           ./generate_integration_config.sh
@@ -41,6 +41,6 @@ jobs:
           python3 -m venv .venv
           source .venv/bin/activate
           make eco-vcenter-ci
-        working-directory: ansible_collections/cloud/vmware_ops
+        working-directory: ansible_collections/vmware/vmware
         env:
           ANSIBLE_COLLECTIONS_PATH: "${{ github.workspace }}"
