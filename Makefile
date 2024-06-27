@@ -12,7 +12,7 @@ integration: prepare_symlinks
 	ansible-test integration --no-temp-workdir
 
 .PHONY: eco-vcenter-ci
-eco-vcenter-ci: install-python-packages install-ansible-collections prepare_symlinks
+eco-vcenter-ci: prepare_symlinks
 	@for dir in $(shell ansible-test integration --list-target --no-temp-workdir | grep 'vmware_ops_'); do \
 	  ansible-test integration --no-temp-workdir $$dir; \
 	done
