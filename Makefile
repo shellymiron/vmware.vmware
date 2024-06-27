@@ -13,7 +13,7 @@ integration: prepare_symlinks
 
 .PHONY: eco-vcenter-ci
 eco-vcenter-ci: prepare_symlinks
-	@for dir in $(shell ansible-test integration --list-target --no-temp-workdir | grep 'vmware_ops_'); do \
+	@for dir in $(shell ansible-test integration --list-target --no-temp-workdir | grep 'vmware_'); do \
 	  ansible-test integration --no-temp-workdir $$dir; \
 	done
 
