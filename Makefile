@@ -27,9 +27,10 @@ eco-vcenter-ci: prepare_symlinks
 	  fi; \
 	done; \
 	if [ $$failed -gt 0 ]; then \
-	  echo "$$failed tests failed"; \
+	  echo "========================"; \
+	  echo "$$failed test(s) failed."; \
 	  echo "Summary of failed tests:"; \
 	  echo "========================"; \
-	  cat test-results/failed-tests.txt; \
+	  cat /tmp/failed-tests.txt; \
 	  exit 1; \
 	fi
