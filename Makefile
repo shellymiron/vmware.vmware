@@ -13,22 +13,17 @@ integration: prepare_symlinks
 
 .PHONY: eco-vcenter-ci
 eco-vcenter-ci: prepare_symlinks
-	@mkdir -p test-results
 	@failed=0; \
 	for dir in $(shell ansible-test integration --list-target --no-temp-workdir | grep 'vmware_'); do \
 	  echo "Running integration test for $$dir"; \
-	  if ! output=$$(ansible-test integration --no-temp-workdir $$dir 2>&1); then \
+	  if ! ansible-test integration --no-temp-workdir $$dir; then \
 	    echo "target name: $$dir" >> /tmp/failed-tests.txt; \
-	    echo "failed on: $$(date)" >> /tmp/failed-tests.txt; \
-	    echo "error message: $$output" >> /tmp/failed-tests.txt; \
-	    echo "-----------------------------" >> /tmp/failed-tests.txt; \
 	    failed=$$((failed + 1)); \
-	    echo "$$failed tests failed in total" >> /tmp/failed-tests.txt; \
+	    echo "$$failed test(s) failed." >> /tmp/failed-tests.txt; \
 	  fi; \
 	done; \
 	if [ $$failed -gt 0 ]; then \
 	  echo "========================"; \
-	  echo "$$failed test(s) failed."; \
 	  echo "Summary of failed tests:"; \
 	  echo "========================"; \
 	  cat /tmp/failed-tests.txt; \
