@@ -19,12 +19,14 @@ eco-vcenter-ci: prepare_symlinks
 	for dir in $(shell ansible-test integration --list-target --no-temp-workdir | grep 'vmware_'); do \
 	  echo "Running integration test for $$dir"; \
 	  total=$$((total + 1)); \
-	  if ! ansible-test integration --no-temp-workdir $$dir; then \
+	  if ansible-test integration --no-temp-workdir $$dir; then \
+	    echo "Test $$dir passed"; \
+	  else \
 	    echo "target name: $$dir" >> /tmp/failed-tests.txt; \
 	    failed=$$((failed + 1)); \
-	    echo "$$failed test(s) failed out of $$total." >> /tmp/failed-tests.txt; \
 	  fi; \
 	done; \
+	echo "$$failed test(s) failed out of $$total." >> /tmp/failed-tests.txt; \
 	if [ $$failed -gt 0 ]; then \
 	  echo "========================"; \
 	  echo "Summary of failed tests:"; \
