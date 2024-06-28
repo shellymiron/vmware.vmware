@@ -29,23 +29,22 @@ eco-vcenter-ci: prepare_symlinks
 	@[ -f /tmp/failed-tests.txt ] && rm /tmp/failed-tests.txt || true; \
 	@failed=0; \
 	total=0; \
-	echo "Failed targets:" >> /tmp/failed-tests.txt; \
+	echo "====================" >> /tmp/failed-tests.txt; \
+	echo "  Tests Summary" >> /tmp/failed-tests.txt; \
+	echo "====================" >> /tmp/failed-tests.txt; \
 	for dir in $(shell ansible-test integration --list-target --no-temp-workdir | grep 'vmware_'); do \
 	  echo "Running integration test for $$dir"; \
 	  total=$$((total + 1)); \
 	  if ansible-test integration --no-temp-workdir $$dir; then \
-	    echo "Test $$dir passed"; \
+	    echo "Test: $$dir Passed" | tee -a /tmp/failed-tests.txt; \
 	  else \
-	    echo "target name: $$dir" >> /tmp/failed-tests.txt; \
+	    echo "Test: $$dir Failed" | tee -a /tmp/failed-tests.txt; \
 	    failed=$$((failed + 1)); \
 	  fi; \
 	done; \
-	echo "------------" >> /tmp/failed-tests.txt; \
-	echo "$$failed test(s) failed out of $$total." >> /tmp/failed-tests.txt; \
+	  echo "------" >> /tmp/failed-tests.txt; \
+	  echo "$$failed test(s) failed out of $$total." >> tee -a /tmp/failed-tests.txt; \
 	if [ $$failed -gt 0 ]; then \
-	  echo "=============="; \
-	  echo " Job Summary"; \
-	  echo "=============="; \
 	  cat /tmp/failed-tests.txt; \
 	  exit 1; \
 	fi
